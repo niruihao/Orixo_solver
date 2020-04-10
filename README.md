@@ -35,5 +35,5 @@ S: move down
 W: move left
 E: move right
 
-https://github.com/niruihao/Orixo_solver/blob/master/fig1.png
+![image](https://github.com/niruihao/Orixo_solver/blob/master/fig1.png)
 
