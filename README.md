@@ -1,6 +1,7 @@
 # Orixo_solver
 This is a game solver for the Orixo puzzle game.
-The solver will not work for the
+The solver can handle the board with up to 3 independent boxes.
+(If there is need to solve more than 3, please just split them to two parts and ran the solver for another time)
 
 Input
 start with 'GRID START', and end with 'GRID STOP'.
@@ -31,8 +32,11 @@ coordination [x, y]
 
 direction:
 N: move up
+
 S: move down
+
 W: move left
+
 E: move right
 
 ![image](https://github.com/niruihao/Orixo_solver/blob/master/fig1.png)
