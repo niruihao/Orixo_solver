@@ -35,6 +35,9 @@ def read_bff(filename):
     # split the input file by line
 
     box = []
+    assert 'GRID START' in line_split, 'Please start input with GRID START'
+    assert 'GRID STOP' in line_split, 'Please terminate input with GRID STOP'
+    # if the input
     a = line_split.index('GRID START')
     b = line_split.index('GRID STOP')
     # get the index of start and end of the box
@@ -52,7 +55,9 @@ def read_bff(filename):
     # convert each line of the message to list
 
     nbox = 1 + box.count([])
-    # nbox is the number of boxes in this board
+    assert nbox <= 3, 'Don\'t input more than 3 boxes at one time'
+    # nbox is the number of boxes in this board, cannot exceed 3
+
     if nbox == 1:
         return [box]
     else:
@@ -329,17 +334,17 @@ def count_o(box):
 
 def solve(box):
     '''
-    This function can solve the single box.
+    This function can solve a single box.
 
     **Parameters**
 
         box: *list*
-            list which contain information of a single list.
+            list of box to be solved.
 
     **Return**
 
-        record: *list*
-            Record the list of move.
+        record3: *list*
+            Record the list of move(solution).
 
     '''
     record1 = []
@@ -403,32 +408,42 @@ def solve_problem(filename):
     filename1 = filename[:-4] + '_solution.txt'
     # create the filename of the output file
     f = open(filename1, 'w')
+    f.write('**********************\nsolution:')
     boxlist = read_bff(filename)
     # read the bff and convert them to lists
 
     # solve the boxes and write all the steps in a text file.
     if len(boxlist) == 1:
-        f.write('box1:' + '\n')
+        f.write('\nbox1:\n')
         write_solu(solve(boxlist[0]))
 
     elif len(boxlist) == 2:
 
-        f.write('box1:' + '\n')
+        f.write('\nbox1:\n')
         write_solu(solve(boxlist[0]))
 
-        f.write('\n' + 'box2:' + '\n')
+        f.write('\nbox2:\n')
         write_solu(solve(boxlist[1]))
 
     elif len(boxlist) == 3:
 
-        f.write('box1:' + '\n')
+        f.write('\nbox1:\n')
         write_solu(solve(boxlist[0]))
 
-        f.write('\n' + 'box2:' + '\n')
+        f.write('\nbox2:\n')
         write_solu(solve(boxlist[1]))
 
-        f.write('\n' + 'box3:' + '\n')
+        f.write('\nbox3:\n')
         write_solu(solve(boxlist[2]))
+
+    # add the output explanation
+    f.write('\n**********************')
+    f.write('\nhow to read the output:' + '\n' + '[x, y], direction\n\n')
+    f.write('direction:\nN: move up\nS: move down\nW: move left\n')
+    f.write('E: move right\n\ncoordination [x, y]\n x 0  1  2  3\n')
+    f.write('y __ __ __ __\n0|__|__|__|__|\n1|__|__|__|__|\n')
+    f.write('2|__|__|__|__|\n3|__|__|__|__|')
+    f.write('\n**********************\n')
 
     f.close()
 
