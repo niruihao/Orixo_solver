@@ -72,7 +72,7 @@ def read_bff(filename):
 
 def num_point(box):
     '''
-    Read how many grid with a number in the box. And also have the
+    Read how many grid with a number in the box. Also include the
     information of the coordination of the number.
 
     **Parameters**
@@ -101,7 +101,7 @@ class Block():
     we can get the number on this grid, return it's coordination
     and we can read how many options of move is available for it.
     To use this class, we must specify the coordinatin of the number box
-    and
+    and the box.
     '''
 
     def __init__(self, x, y, box):
@@ -349,6 +349,7 @@ def solve(box):
     '''
     record1 = []
     box1 = box
+    # first move the 'must move'
     while must_move(box1):
         motion = must_move(box1)
         box1 = update_box(box1, motion)
@@ -359,14 +360,14 @@ def solve(box):
 
     box2 = box1
     record2 = record1
-
+    # then move the 'may move'
     maychoice = may_move(box2)
     for choice in maychoice:
         box3 = copy.deepcopy(box2)
         record3 = copy.deepcopy(record2)
         box4 = update_box(box3, [choice])
         record3.append(choice)
-
+        # the operate another 'must_move'
         while must_move(box4):
             motion = must_move(box4)
             box3 = update_box(box4, motion)
@@ -448,13 +449,64 @@ def solve_problem(filename):
     f.close()
 
 
+def Unittest():
+    '''
+    A Unit test function to test whether the functions are working.
+
+    **Parameters**
+
+        None
+
+    **Return**
+
+        None
+    '''
+    # Read the box
+    boxlist = read_bff('board_1_13.bff')
+    box = boxlist[0]
+
+    # test read_bff function
+    assert box[0][2] == 2, 'read_bff failed'
+    assert box[1][4] == 1, 'read_bff failed'
+    # test the numpoint function
+    # numpoint:
+    # [[1, 0], [2, 0], [3, 0], [1, 1], [4, 1], [4, 2], [0, 3]]
+    assert num_point(box)[0] == [1, 0], 'num_point failed'
+    # test count_o function, there are 12 o for original box
+    assert count_o(box) == 12, 'count_o failed'
+
+    a = Block(1, 1, box)
+    # number for [1,1] is 1
+    assert a.num() == 1
+    # coordination is [1, 1]
+    assert a.coor() == [1, 1]
+    # option is [['E', 2], ['S', 2]]
+    assert a.option()[0] == ['E', 2]
+    b = Block(0, 3, box)
+    # number for [0,3] is 2
+    assert b.num() == 2
+    # coordination is [0, 3]
+    assert b.coor() == [0, 3]
+    # option is [['E', 5]]
+    assert b.option() == [['E', 5]]
+
+    solved = (update_box(box, solve(box)))
+    for y in range(len(solved)):
+        for x in range(len(solved[0])):
+            assert solved[y][x] == 'x' or solved[y][x] == 'f' \
+                or solved[y][x] == 0
+    print('11 unit tests are finished')
+
+
 if __name__ == '__main__':
+    # Unittest()
+
     solve_problem('board_1_02.bff')
     solve_problem('board_1_03.bff')
     solve_problem('board_1_13.bff')
     solve_problem('board_1_14.bff')
     solve_problem('board_1_50.bff')
-    # solve_problem('board_2_02.bff')
-    # solve_problem('board_2_16.bff')
-    # solve_problem('board_3_14.bff')
-    # solve_problem('board_4_26.bff')
+    solve_problem('board_2_02.bff')
+    solve_problem('board_2_16.bff')
+    solve_problem('board_3_14.bff')
+    solve_problem('board_4_26.bff')
